@@ -47,6 +47,7 @@ under the License.
 
   <properties>
     <maven.version>3.0.5</maven.version>
+    <surefire.version>2.22.3</surefire.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <classWorldsVersion>2.6.0</classWorldsVersion>
@@ -78,6 +79,13 @@ under the License.
     <checkstyle.excludes>**/package-info.java</checkstyle.excludes>
     <project.build.outputTimestamp>2019-11-07T12:32:18Z</project.build.outputTimestamp>
   </properties>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven-1572</id>
+      <url>https://repository.apache.org/content/repositories/maven-1572</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <modules>
     <module>maven-plugin-api</module>
