@@ -64,6 +64,9 @@ node(jenkinsEnv.nodeSelection(osNode)) {
                 sh "mv apache-maven-*-bin.zip apache-maven-dist.zip"
                 stash includes: 'apache-maven-dist.zip', name: 'dist'
             }
+            dir ('maven-wrapper/target') {
+                stash includes: ['apache-maven-wrapper-*.zip','maven-wrapper.jar'], name: 'wrappers'
+            }
         }
 
         tests = resolveScm source: [$class: 'GitSCMSource', credentialsId: '', id: '_', remote: 'https://gitbox.apache.org/repos/asf/maven-integration-testing.git', traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'], [$class: 'GitToolSCMSourceTrait', gitTool: 'Default']]], targets: [BRANCH_NAME, 'master']
@@ -97,11 +100,12 @@ for (String os in runITsOses) {
                             bat "if exist apache-maven-dist.zip del /q apache-maven-dist.zip"
                         }
                         unstash 'dist'
+						unstash 'wrappers'
                         try {
                             withMaven(jdk: jdkName, maven: mvnName, mavenLocalRepo:"${WORK_DIR}/it-local-repo", options:[
                                 junitPublisher(ignoreAttachments: false)
                             ]) {
-                                String cmd = "${runITscommand} -DmavenDistro=$WORK_DIR/apache-maven-dist.zip -Dmaven.test.failure.ignore=true"
+                                String cmd = "${runITscommand} -DmavenDistro=$WORK_DIR/apache-maven-dist.zip -Dmaven.test.failure.ignore=true -DmavenWrapper=$WORK_DIR/maven-wrapper.jar -DwrapperDistroDir=${WORK_DIR}"
 
                                 if (isUnix()) {
                                     sh 'df -hT'
