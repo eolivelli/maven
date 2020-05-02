@@ -58,7 +58,9 @@ node(jenkinsEnv.nodeSelection(osNode)) {
                 invokerPublisher(),
                 pipelineGraphPublisher()
             ]) {
-                sh "mvn clean ${MAVEN_GOAL} -B -U -e -fae -V -Dmaven.test.failure.ignore=true"
+			    // For now: maven-wrapper contains 2 poms sharing the same outputDirectory, so separate clean
+			    sh "mvn clean"
+                sh "mvn ${MAVEN_GOAL} -B -U -e -fae -V -Dmaven.test.failure.ignore=true"
             }
             dir ('apache-maven/target') {
                 sh "mv apache-maven-*-bin.zip apache-maven-dist.zip"
