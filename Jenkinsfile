@@ -67,7 +67,7 @@ node(jenkinsEnv.nodeSelection(osNode)) {
                 stash includes: 'apache-maven-dist.zip', name: 'dist'
             }
             dir ('maven-wrapper/target') {
-                stash includes: ['apache-maven-wrapper-*.zip','maven-wrapper.jar'], name: 'wrappers'
+                stash includes: 'apache-maven-wrapper-*.zip,maven-wrapper.jar', name: 'wrappers'
             }
         }
 
