@@ -39,12 +39,12 @@ under the License.
       <outputDirectory>.</outputDirectory>
       <lineEnding>unix</lineEnding>
       <fileMode>0755</fileMode>
-      <filtered>true</filtered>
     </file>
     <file>
       <source>src/assembly/shared/mvnw.cmd</source>
       <outputDirectory>.</outputDirectory>
       <lineEnding>dos</lineEnding>
+      <filtered>true</filtered>
     </file>
     <file>
       <source>src/assembly/shared/mvnw</source>
