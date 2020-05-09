@@ -64,10 +64,10 @@ node(jenkinsEnv.nodeSelection(osNode)) {
             }
             dir ('apache-maven/target') {
                 sh "mv apache-maven-*-bin.zip apache-maven-dist.zip"
-                stash includes: 'apache-maven-dist.zip', name: 'dist'
+                stash includes: 'apache-maven-dist.zip', name: 'maven-dist'
             }
             dir ('maven-wrapper/target') {
-                stash includes: 'apache-maven-wrapper-*.zip,maven-wrapper.jar', name: 'wrappers'
+                stash includes: 'apache-maven-wrapper-*.zip,maven-wrapper.jar', name: 'wrapper-dist'
             }
         }
 
@@ -96,18 +96,20 @@ for (String os in runITsOses) {
                         def WORK_DIR=pwd()
                         checkout tests
                         if (isUnix()) {
-                            sh "rm -rvf $WORK_DIR/apache-maven-dist.zip $WORK_DIR/it-local-repo"
+                            sh "rm -rvf $WORK_DIR/dists $WORK_DIR/it-local-repo"
                         } else {
                             bat "if exist it-local-repo rmdir /s /q it-local-repo"
-                            bat "if exist apache-maven-dist.zip del /q apache-maven-dist.zip"
+                            bat "if exist dists         rmdir /s /q dists"
                         }
-                        unstash 'dist'
-						unstash 'wrappers'
+                        dir('dists') {
+                          unstash 'maven-dist'
+                          unstash 'wrapper-dist'
+                        }
                         try {
                             withMaven(jdk: jdkName, maven: mvnName, mavenLocalRepo:"${WORK_DIR}/it-local-repo", options:[
                                 junitPublisher(ignoreAttachments: false)
                             ]) {
-                                String cmd = "${runITscommand} -DmavenDistro=$WORK_DIR/apache-maven-dist.zip -Dmaven.test.failure.ignore=true -DmavenWrapper=$WORK_DIR/maven-wrapper.jar -DwrapperDistroDir=${WORK_DIR}"
+                                String cmd = "${runITscommand} -DmavenDistro=$WORK_DIR/dists/apache-maven-dist.zip -Dmaven.test.failure.ignore=true -DmavenWrapper=$WORK_DIR/dists/maven-wrapper.jar -DwrapperDistroDir=${WORK_DIR}/dists"
 
                                 if (isUnix()) {
                                     sh 'df -hT'
