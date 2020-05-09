@@ -106,7 +106,7 @@ for (String os in runITsOses) {
                           unstash 'wrapper-dist'
 
                           if (isUnix()) {
-                            sh 'ls -al'
+                            sh 'zip-info apache-maven-wrapper-3.7.0-SNAPSHOT-bin.zip'
                           }
                         }
                         try {
