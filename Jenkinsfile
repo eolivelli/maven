@@ -104,6 +104,10 @@ for (String os in runITsOses) {
                         dir('dists') {
                           unstash 'maven-dist'
                           unstash 'wrapper-dist'
+
+                          if (isUnix()) {
+                            sh 'ls -al'
+                          }
                         }
                         try {
                             withMaven(jdk: jdkName, maven: mvnName, mavenLocalRepo:"${WORK_DIR}/it-local-repo", options:[
