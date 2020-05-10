@@ -259,7 +259,7 @@ else
       wrapperJarPath=`cygpath --path --windows "$wrapperJarPath"`
     fi
 
-    if [ ${jarUrl:0:4} != 'file' ] && command -v wget > /dev/null; then
+    if [ `echo "${jarUrl}" | cut -c 1-4` != 'file' ] && command -v wget > /dev/null; then
         if [ "$MVNW_VERBOSE" = true ]; then
           echo "Found wget ... using wget"
         fi
